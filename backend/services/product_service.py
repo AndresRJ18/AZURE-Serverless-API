@@ -6,39 +6,56 @@ import logging
 class ProductService:
     """Servicio para gestionar productos (in-memory storage)"""
     
+    _instance = None
+    _initialized = False
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(ProductService, cls).__new__(cls)
+        return cls._instance
+    
     def __init__(self):
-        self.products: Dict[str, Product] = {}
-        self._init_sample_data()
+        if not ProductService._initialized:
+            self.products: Dict[str, Product] = {}
+            self._init_sample_data()
+            ProductService._initialized = True
     
     def _init_sample_data(self):
         """Inicializar con datos de ejemplo"""
-        sample_products = [
-            ProductCreate(
-                name="Laptop Dell XPS 13",
-                description="Laptop ultradelgada de alto rendimiento",
-                price=1299.99,
-                stock=15,
-                category="Electronics"
-            ),
-            ProductCreate(
-                name="Mouse Logitech MX Master 3",
-                description="Mouse ergonómico inalámbrico",
-                price=99.99,
-                stock=50,
-                category="Accessories"
-            ),
-            ProductCreate(
-                name="Teclado Mecánico Keychron K2",
-                description="Teclado mecánico compacto RGB",
-                price=89.99,
-                stock=30,
-                category="Accessories"
-            )
-        ]
-        
-        for product_data in sample_products:
-            product = Product(**product_data.model_dump())
-            self.products[product.id] = product
+        try:
+            sample_products = [
+                {
+                    "name": "Laptop Dell XPS 13",
+                    "description": "Laptop ultradelgada de alto rendimiento",
+                    "price": 1299.99,
+                    "stock": 15,
+                    "category": "Electronics"
+                },
+                {
+                    "name": "Mouse Logitech MX Master 3",
+                    "description": "Mouse ergonomico inalambrico",
+                    "price": 99.99,
+                    "stock": 50,
+                    "category": "Accessories"
+                },
+                {
+                    "name": "Teclado Mecanico Keychron K2",
+                    "description": "Teclado mecanico compacto RGB",
+                    "price": 89.99,
+                    "stock": 30,
+                    "category": "Accessories"
+                }
+            ]
+            
+            for product_dict in sample_products:
+                product_data = ProductCreate(**product_dict)
+                product = Product(**product_data.dict())
+                self.products[product.id] = product
+            
+            logging.info(f"Datos de ejemplo inicializados: {len(self.products)} productos")
+        except Exception as e:
+            logging.error(f"Error inicializando datos: {str(e)}", exc_info=True)
+            self.products = {}
     
     def get_all(self) -> List[Product]:
         """Obtener todos los productos"""
@@ -56,7 +73,7 @@ class ProductService:
     
     def create(self, product_data: ProductCreate) -> Product:
         """Crear nuevo producto"""
-        product = Product(**product_data.model_dump())
+        product = Product(**product_data.dict())
         self.products[product.id] = product
         logging.info(f"Producto creado: {product.id} - {product.name}")
         return product
@@ -69,7 +86,7 @@ class ProductService:
             return None
         
         # Actualizar solo los campos proporcionados
-        update_data = product_data.model_dump(exclude_unset=True)
+        update_data = product_data.dict(exclude_unset=True)
         for field, value in update_data.items():
             setattr(product, field, value)
         
@@ -86,5 +103,9 @@ class ProductService:
         logging.warning(f"Intento de eliminar producto inexistente: {product_id}")
         return False
 
-# Instancia global del servicio (singleton)
-product_service = ProductService()
+# Función para obtener instancia del servicio
+def get_product_service():
+    return ProductService()
+
+# Para compatibilidad con código existente
+product_service = get_product_service()

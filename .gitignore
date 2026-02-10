@@ -1,7 +1,7 @@
 ﻿# Python
 __pycache__/
 *.py[cod]
-*.class
+*$py.class
 *.so
 .Python
 venv/
@@ -11,14 +11,40 @@ ENV/
 # Azure Functions
 local.settings.json
 .vscode/
-.funcignore
+.venv/
+.python_packages/
+__azurite_db*__.json
+__blobstorage__/
+__queuestorage__/
+__azurite_db*__.json
 
 # OS
 .DS_Store
 Thumbs.db
-
-# IDEs
-.idea/
 *.swp
 *.swo
 *~
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Deployment
+deployment-package/
+*.zip
+node_modules/
+
+# Logs
+*.log
+
+# Misc
+.env
+*.bak
+deployment-info.json
+deployment-summary.json

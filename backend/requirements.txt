@@ -3,3 +3,4 @@
 # azure-monitor-opentelemetry 
 
 azure-functions
+pydantic==1.10.13

@@ -16,7 +16,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Obteniendo lista de productos')
     try:
         products = product_service.get_all()
-        products_data = [p.model_dump() for p in products]
+        products_data = [p.dict() for p in products]
         return success_response({
             "count": len(products_data),
             "products": products_data
