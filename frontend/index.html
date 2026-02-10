@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products API Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        
+        /* Dark mode custom styles */
+        .dark { color-scheme: dark; }
+        
+        /* Smooth transitions */
+        * { transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        .dark ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Skeleton loading animation */
+        @keyframes skeleton-loading {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        .dark .skeleton {
+            background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+            background-size: 200px 100%;
+        }
+    </style>
+    
+    <script>
+        // Dark mode initialization (before page load to prevent flash)
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    
+    <!-- Navbar -->
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="lg:hidden mr-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i data-lucide="box" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Products API</span>
+                    </div>
+                </div>
+                
+                <!-- Search (hidden on mobile) -->
+                <div class="hidden md:flex flex-1 max-w-lg mx-8">
+                    <div class="relative w-full">
+                        <input 
+                            type="text" 
+                            id="global-search"
+                            placeholder="Search products..." 
+                            class="w-full px-4 py-2 pl-10 bg-gray-100 dark:bg-gray-700 border-0 rounded-lg focus:ring-2 focus:ring-blue-500 dark:text-white"
+                        >
+                        <i data-lucide="search" class="absolute left-3 top-2.5 w-5 h-5 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Right side -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i data-lucide="sun" class="w-5 h-5 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+                    <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm font-semibold">AR</span>
+                        </div>
+                        <span class="text-sm font-medium">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 z-40">
+            <nav class="p-4 space-y-2">
+                <a href="#" class="nav-link active flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    <span class="font-medium">Products</span>
+                </a>
+                <a href="#" class="nav-link flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span class="font-medium">Settings</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Sidebar overlay (mobile) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
+        
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto">
+                
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 space-y-4 sm:space-y-0">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+                        <p class="text-gray-600 dark:text-gray-400 mt-1">Manage your products inventory</p>
+                    </div>
+                    <button id="new-product-btn" class="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm hover:shadow-md transition-all">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        <span>New Product</span>
+                    </button>
+                </div>
+                
+                <!-- Summary Cards -->
+                <div id="summary-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Loading skeletons -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="skeleton h-4 w-24 rounded mb-3"></div>
+                        <div class="skeleton h-8 w-16 rounded"></div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="skeleton h-4 w-24 rounded mb-3"></div>
+                        <div class="skeleton h-8 w-16 rounded"></div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="skeleton h-4 w-24 rounded mb-3"></div>
+                        <div class="skeleton h-8 w-16 rounded"></div>
+                    </div>
+                </div>
+                
+                <!-- Products Section -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Products</h2>
+                            <div class="flex flex-col sm:flex-row w-full sm:w-auto space-y-3 sm:space-y-0 sm:space-x-3">
+                                <div class="relative flex-1 sm:flex-initial">
+                                    <input 
+                                        type="text" 
+                                        id="product-search"
+                                        placeholder="Search..." 
+                                        class="w-full sm:w-64 px-4 py-2 pl-10 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    >
+                                    <i data-lucide="search" class="absolute left-3 top-2.5 w-5 h-5 text-gray-400"></i>
+                                </div>
+                                <select id="category-filter" class="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <option value="">All Categories</option>
+                                </select>
+                                <button id="refresh-btn" class="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center justify-center space-x-2">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                    <span class="hidden sm:inline">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Table (Desktop) -->
+                    <div class="hidden lg:block overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Product</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Stock</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <!-- Loading skeleton -->
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4">
+                                        <div class="flex items-center justify-center py-8">
+                                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Cards (Mobile) -->
+                    <div id="products-grid" class="lg:hidden p-4 space-y-4">
+                        <!-- Loading skeleton -->
+                        <div class="flex items-center justify-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+                            <p id="results-info" class="text-sm text-gray-600 dark:text-gray-400">
+                                Loading...
+                            </p>
+                            <div id="pagination" class="flex space-x-2">
+                                <!-- Pagination buttons will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal (Create/Edit Product) -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75 backdrop-blur-sm" id="modal-backdrop"></div>
+            
+            <!-- Modal panel -->
+            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
+                <form id="product-form">
+                    <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 id="modal-title" class="text-xl font-semibold text-gray-900 dark:text-white">New Product</h3>
+                            <button type="button" id="close-modal" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="px-6 py-6 space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                            <input 
+                                type="text" 
+                                id="product-name" 
+                                required
+                                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Product name"
+                            >
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                            <textarea 
+                                id="product-description" 
+                                rows="3"
+                                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Product description"
+                            ></textarea>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price</label>
+                                <input 
+                                    type="number" 
+                                    id="product-price" 
+                                    step="0.01"
+                                    min="0"
+                                    required
+                                    class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="0.00"
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stock</label>
+                                <input 
+                                    type="number" 
+                                    id="product-stock" 
+                                    min="0"
+                                    required
+                                    class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="0"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                            <input 
+                                type="text" 
+                                id="product-category" 
+                                required
+                                class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Electronics, Accessories, etc."
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 flex justify-end space-x-3">
+                        <button 
+                            type="button" 
+                            id="cancel-btn"
+                            class="px-5 py-2.5 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-500 font-medium"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            id="save-btn"
+                            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center space-x-2"
+                        >
+                            <span>Save Product</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-3 max-w-sm">
+        <!-- Toasts will be inserted here -->
+    </div>
+    
+    <!-- App JS -->
+    <script src="js/app.js"></script>
+    
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
