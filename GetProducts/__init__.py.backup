@@ -9,11 +9,15 @@ parent_dir = os.path.dirname(current_dir)
 if parent_dir not in sys.path:
     sys.path.insert(0, parent_dir)
 
-from services.product_service import product_service
-from utils.responses import success_response, error_response
+try:
+    from services.product_service import product_service
+    from utils.responses import success_response, error_response
+except ImportError as e:
+    logging.error(f"Import error: {e}")
+    raise
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Obteniendo lista de productos')
+    logging.info('GetProducts function triggered')
     try:
         products = product_service.get_all()
         products_data = [p.model_dump() for p in products]
@@ -22,5 +26,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "products": products_data
         })
     except Exception as e:
-        logging.error(f"Error: {str(e)}", exc_info=True)
-        return error_response(f"Error: {str(e)}", status_code=500)
+        logging.error(f"Error in GetProducts: {str(e)}", exc_info=True)
+        return error_response(f"Internal error: {str(e)}", status_code=500)
