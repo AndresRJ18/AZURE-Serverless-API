@@ -455,13 +455,15 @@ function toggleTheme() {
     
     if (isDark) {
         html.classList.remove('dark');
-        localStorage.theme = 'light';
+        localStorage.setItem('theme', 'light');
     } else {
         html.classList.add('dark');
-        localStorage.theme = 'dark';
+        localStorage.setItem('theme', 'dark');
     }
+    
+    // Re-render icons after theme change
+    lucide.createIcons();
 }
-
 // ============================================================================
 // SIDEBAR TOGGLE (Mobile)
 // ============================================================================
