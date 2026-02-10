@@ -20,7 +20,7 @@ Demuestra cómo construir y desplegar aplicaciones cloud-native escalables sin g
 
 ## 🌐 Demo en Vivo
 
-🚀 **Frontend:** [https://[static-app-name].azurewebsites.net](https://[static-app-name].azurewebsites.net)  
+🚀 **Frontend:** [https://[static-app-name].azurewebsites.net](https://zealous-pebble-02548630f.1.azurestaticapps.net/)  
 ⚡ **API Backend:** [https://fnapi6794.azurewebsites.net](https://fnapi6794.azurewebsites.net)  
 📦 **GitHub:** [https://github.com/AndresRJ18/AZURE-Serverless-API](https://github.com/AndresRJ18/AZURE-Serverless-API)
 
