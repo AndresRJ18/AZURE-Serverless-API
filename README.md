@@ -1,4 +1,4 @@
-# ☁️ Azure Serverless Product API — Fullstack Cloud Application
+# Azure Serverless Product API
 
 ![Azure](https://img.shields.io/badge/Azure-Serverless-0078D4?style=for-the-badge&logo=microsoft-azure)
 ![Azure Functions](https://img.shields.io/badge/Azure_Functions-v4-0062AD?style=for-the-badge&logo=azure-functions)
@@ -6,216 +6,161 @@
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=for-the-badge&logo=tailwind-css)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Licencia](https://img.shields.io/badge/Licencia-MIT-green?style=for-the-badge)
 
-## 📋 Descripción
+Aplicación fullstack serverless lista para producción, construida sobre Microsoft Azure. Implementa un sistema completo de gestión de productos con una API REST en el backend y un dashboard moderno y responsivo en el frontend — desplegada íntegramente en los servicios gratuitos de Azure a **$0/mes**.
 
-**Azure Serverless Product API** es una aplicación fullstack completa construida con arquitectura serverless en Microsoft Azure. Implementa un sistema CRUD de gestión de productos con API REST backend y un dashboard frontend moderno, todo desplegado en servicios serverless de Azure con **costo $0/mes** usando el free tier.
-
-### Problema que resuelve
-
-Demuestra cómo construir y desplegar aplicaciones cloud-native escalables sin gestionar servidores, utilizando las mejores prácticas de desarrollo serverless, validación de datos robusta, y diseño responsive profesional.
+**Demo en vivo:** [https://zealous-pebble-02548630f.1.azurestaticapps.net](https://zealous-pebble-02548630f.1.azurestaticapps.net) &nbsp;|&nbsp;
+**API:** [https://fnapi6794.azurewebsites.net](https://fnapi6794.azurewebsites.net) &nbsp;|&nbsp;
+**Repositorio:** [GitHub](https://github.com/AndresRJ18/AZURE-Serverless-API)
 
 ---
 
-## 🌐 Demo en Vivo
+## Tabla de Contenidos
 
-🚀 **Frontend:** [https://[static-app-name].azurewebsites.net](https://zealous-pebble-02548630f.1.azurestaticapps.net/)  
-⚡ **API Backend:** [https://fnapi6794.azurewebsites.net](https://fnapi6794.azurewebsites.net)  
-📦 **GitHub:** [https://github.com/AndresRJ18/AZURE-Serverless-API](https://github.com/AndresRJ18/AZURE-Serverless-API)
-
-### Health Check
-```bash
-curl https://fnapi6794.azurewebsites.net/api/health
-```
-
----
-
-## 🏗️ Arquitectura
-
-```
-┌─────────────────┐
-│   Usuario Web   │
-└────────┬────────┘
-         │ HTTPS
-         ▼
-┌─────────────────────────────┐
-│ Azure Static Web Apps       │
-│ • HTML5 + JavaScript ES6+   │
-│ • Tailwind CSS 3.4          │
-│ • Dark Mode Toggle          │
-│ • Responsive Design         │
-└────────┬────────────────────┘
-         │ REST API Calls
-         │ (CORS Enabled)
-         ▼
-┌─────────────────────────────┐
-│ Azure Functions (Python)    │
-│ ┌─────────────────────────┐ │
-│ │ GET  /api/health        │ │
-│ │ GET  /api/products      │ │
-│ │ GET  /api/products/{id} │ │
-│ │ POST /api/products      │ │
-│ │ PUT  /api/products/{id} │ │
-│ │ DEL  /api/products/{id} │ │
-│ └─────────────────────────┘ │
-│ • Pydantic Validation       │
-│ • Modular Architecture      │
-│ • Error Handling            │
-└────────┬────────────────────┘
-         │
-         ▼
-┌─────────────────────────────┐
-│ In-Memory Data Store        │
-│ (Extendible a Azure SQL/    │
-│  CosmosDB)                  │
-└─────────────────────────────┘
-```
-
-**Flujo de datos:**
-1. Usuario interactúa con el dashboard (Static Web App)
-2. Frontend realiza llamadas AJAX al backend (Azure Functions)
-3. Backend valida datos con Pydantic
-4. Procesa la lógica de negocio (CRUD operations)
-5. Retorna respuestas JSON estandarizadas
-6. Frontend actualiza UI con toast notifications
+- [Arquitectura](#arquitectura)
+- [Características](#características)
+- [Stack Tecnológico](#stack-tecnológico)
+- [Referencia de la API](#referencia-de-la-api)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Desarrollo Local](#desarrollo-local)
+- [Despliegue](#despliegue)
+- [Pruebas](#pruebas)
+- [Costos](#costos)
+- [Roadmap](#roadmap)
+- [Contribuciones](#contribuciones)
+- [Autor](#autor)
+- [Licencia](#licencia)
 
 ---
 
-## ✨ Características
+## Arquitectura
 
-### Backend (Azure Functions)
-- ✅ **6 Endpoints REST** completamente funcionales
-- ✅ **Validación robusta** con Pydantic v1.10.13
-- ✅ **Arquitectura modular** (models/, services/, utils/)
-- ✅ **CORS configurado** para integración frontend
-- ✅ **Manejo de errores** centralizado
-- ✅ **Responses estandarizadas** (success/error)
-- ✅ **Python 3.12** con type hints
-- ✅ **Consumption Plan** (auto-scaling)
+```mermaid
+graph TD
+    User[🧑‍💻 Usuario Web] -->|HTTPS| SWA[🌐 Azure Static Web Apps\nHTML · JS · Tailwind CSS]
+    SWA -->|REST API / CORS| AFN[⚙️ Azure Functions v4\nPython 3.12 · HTTP Triggers]
+    AFN -->|Validación de esquema| PYD[(Modelos Pydantic\nv1.10.13)]
+    AFN -->|Operaciones CRUD| MEM[💾 Almacenamiento en memoria\nExtensible a CosmosDB / SQL]
+    MEM -->|Datos de respuesta| AFN
+    AFN -->|Respuesta JSON| SWA
+    SWA -->|Actualización de UI| User
 
-### Frontend (Static Web App)
-- ✅ **Dashboard profesional** con diseño moderno
-- ✅ **Dark Mode** con persistencia en localStorage
-- ✅ **100% Responsive** (mobile-first)
-- ✅ **Búsqueda en tiempo real**
-- ✅ **Paginación** de resultados
-- ✅ **Toast notifications** para feedback
-- ✅ **Loading states** en todas las operaciones
-- ✅ **Formularios validados** con UX optimizada
-- ✅ **Tailwind CSS 3.4** (sin compilador)
-- ✅ **Lucide Icons** para iconografía
+    subgraph Nube de Azure
+        SWA
+        AFN
+        PYD
+        MEM
+    end
+```
+
+**Ciclo de vida de una solicitud:** El frontend emite llamadas AJAX desde el Static Web App hacia el backend en Azure Functions. Cada función valida el payload de forma independiente con Pydantic, ejecuta la operación correspondiente en la capa de servicios y devuelve una respuesta JSON estandarizada. El frontend actualiza la interfaz de forma reactiva mediante notificaciones toast y estados de carga.
+
+---
+
+## Características
+
+### Backend — Azure Functions
+
+| Capacidad | Detalle |
+|---|---|
+| Endpoints REST | 6 HTTP triggers (health check + CRUD completo) |
+| Validación de datos | Pydantic v1.10.13 con validación de esquema |
+| Arquitectura | Modular: `models/`, `services/`, `utils/` |
+| Manejo de errores | Centralizado con envoltura estándar `success/error` |
+| CORS | Configurado por origen para integración con el frontend |
+| Runtime | Python 3.12 con anotaciones de tipo completas |
+| Escalado | Azure Consumption Plan — escala a cero, sin costo en reposo |
+
+### Frontend — Azure Static Web Apps
+
+| Capacidad | Detalle |
+|---|---|
+| Framework de UI | Vanilla JavaScript ES6+ — sin paso de compilación |
+| Estilos | Tailwind CSS 3.4 via CDN |
+| Modo oscuro | Toggle con persistencia en `localStorage` |
+| Responsivo | Diseño mobile-first en todos los viewports |
+| Experiencia de usuario | Búsqueda en tiempo real, paginación, notificaciones toast, estados de carga |
+| Iconos | Lucide Icons |
 
 ### DevOps
-- ✅ **CI/CD automático** con GitHub Actions
-- ✅ **Deploy on push** a main branch
-- ✅ **Zero-downtime deployments**
-- ✅ **Environment isolation**
+
+| Capacidad | Detalle |
+|---|---|
+| CI/CD | GitHub Actions — despliegue automático en cada push a `main` |
+| Deploy frontend | Gestionado por el workflow de Azure Static Web Apps |
+| Deploy backend | `func azure functionapp publish` vía GitHub Actions |
+| Entornos | Aislamiento basado en ramas |
 
 ---
 
-## 💰 Costos Estimados
+## Stack Tecnológico
 
-| Servicio | Plan | Costo Mensual |
-|----------|------|---------------|
-| Azure Functions | Consumption (Free Tier) | **$0** (1M ejecuciones gratis) |
-| Azure Static Web Apps | Free Tier | **$0** (100GB bandwidth) |
-| Azure Storage Account | General Purpose v2 | **$0** (uso mínimo) |
-| **TOTAL** | | **$0/mes** 🎉 |
+### Backend
 
-> ⚠️ **Nota:** Los costos pueden variar si se exceden los límites del free tier.
+| Componente | Tecnología |
+|---|---|
+| Runtime | Python 3.12 |
+| Framework | Azure Functions v4 |
+| Validación | Pydantic 1.10.13 |
+| Tipo de trigger | HTTP Trigger (nivel de autenticación anónimo) |
+
+### Frontend
+
+| Componente | Tecnología |
+|---|---|
+| Lenguaje | JavaScript ES6+ (Vanilla) |
+| Estilos | Tailwind CSS 3.4 (CDN) |
+| Iconos | Lucide Icons |
+| Hosting | Azure Static Web Apps (Free Tier) |
+
+### Infraestructura Azure
+
+| Recurso | Nombre | Región |
+|---|---|---|
+| Grupo de recursos | `rg-products-api` | East US |
+| Function App | `fnapi6794` | East US |
+| Cuenta de almacenamiento | `stapi2025andres` | East US |
+| Static Web App | `products-dashboard-6627` | East US 2 |
 
 ---
 
-## 🚀 Quick Start
+## Referencia de la API
 
-### Requisitos Previos
-- Python 3.12+
-- Azure CLI (`az --version`)
-- Azure Functions Core Tools v4 (`func --version`)
-- Git
-- Cuenta de Azure (free tier disponible)
+### Endpoints
 
-### Instalación Local
+| Método | Endpoint | Descripción | Cuerpo |
+|---|---|---|---|
+| `GET` | `/api/health` | Health check del servicio | — |
+| `GET` | `/api/products` | Listar todos los productos | — |
+| `GET` | `/api/products/{id}` | Obtener producto por ID | — |
+| `POST` | `/api/products` | Crear un producto | `name`, `price`, `stock` |
+| `PUT` | `/api/products/{id}` | Actualizar un producto | `name`, `price`, `stock` (parcial) |
+| `DELETE` | `/api/products/{id}` | Eliminar un producto | — |
 
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/AndresRJ18/AZURE-Serverless-API.git
-cd AZURE-Serverless-API
+Todas las respuestas siguen una envoltura consistente:
 
-# 2. Instalar dependencias del backend
-cd backend
-pip install -r requirements.txt
-
-# 3. Ejecutar Azure Functions localmente
-func start
-
-# 4. En otra terminal, servir el frontend
-cd ../frontend
-python -m http.server 8000
-
-# 5. Abrir en el navegador
-# Frontend: http://localhost:8000
-# API: http://localhost:7071/api/health
+```json
+{ "success": true,  "data": { ... } }
+{ "success": false, "error": "Descripción del error" }
 ```
-
-### Configuración de Variables de Entorno
-
-```bash
-# backend/local.settings.json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "python",
-    "CORS_ORIGINS": "*"
-  }
-}
-```
-
----
-
-## 📡 API Documentation
-
-### Endpoints Disponibles
-
-| Método | Endpoint | Descripción | Request Body |
-|--------|----------|-------------|--------------|
-| `GET` | `/api/health` | Health check | - |
-| `GET` | `/api/products` | Listar todos los productos | - |
-| `GET` | `/api/products/{id}` | Obtener producto por ID | - |
-| `POST` | `/api/products` | Crear nuevo producto | `{"name": "...", "price": 0.0, "stock": 0}` |
-| `PUT` | `/api/products/{id}` | Actualizar producto | `{"name": "...", "price": 0.0, "stock": 0}` |
-| `DELETE` | `/api/products/{id}` | Eliminar producto | - |
 
 ### Ejemplos de Uso
 
-#### Health Check
+**Health Check**
 ```bash
 curl https://fnapi6794.azurewebsites.net/api/health
 ```
-
-**Respuesta:**
 ```json
-{
-  "status": "healthy",
-  "timestamp": "2025-02-10T12:00:00Z",
-  "service": "Products API"
-}
+{ "status": "healthy", "timestamp": "2025-02-10T12:00:00Z", "service": "Products API" }
 ```
 
-#### Crear Producto
+**Crear producto**
 ```bash
 curl -X POST https://fnapi6794.azurewebsites.net/api/products \
   -H "Content-Type: application/json" \
-  -d '{
-    "name": "Laptop Dell XPS 15",
-    "price": 1499.99,
-    "stock": 25
-  }'
+  -d '{"name": "Laptop Dell XPS 15", "price": 1499.99, "stock": 25}'
 ```
-
-**Respuesta:**
 ```json
 {
   "success": true,
@@ -229,349 +174,261 @@ curl -X POST https://fnapi6794.azurewebsites.net/api/products \
 }
 ```
 
-#### Listar Productos
+**Listar productos**
 ```bash
 curl https://fnapi6794.azurewebsites.net/api/products
 ```
-
-**Respuesta:**
 ```json
 {
   "success": true,
-  "data": [
-    {
-      "id": "550e8400-e29b-41d4-a716-446655440000",
-      "name": "Laptop Dell XPS 15",
-      "price": 1499.99,
-      "stock": 25,
-      "created_at": "2025-02-10T12:00:00Z"
-    }
-  ],
+  "data": [ { "id": "...", "name": "Laptop Dell XPS 15", "price": 1499.99, "stock": 25 } ],
   "count": 1
 }
 ```
 
-📖 **Documentación completa:** Ver [docs/API.md](docs/API.md)
+Referencia completa con todos los esquemas de solicitud y respuesta: [`docs/API.md`](docs/API.md)
 
 ---
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 AZURE-Serverless-API/
 │
-├── backend/                      # Azure Functions Backend
-│   ├── models/                   # Pydantic Models
-│   │   └── product_model.py      # Product schema y validación
-│   ├── services/                 # Business Logic
-│   │   └── product_service.py    # CRUD operations
-│   ├── utils/                    # Utilidades compartidas
-│   │   └── response_helper.py    # JSON response builder
-│   ├── HealthCheck/              # GET /api/health
-│   │   ├── __init__.py
-│   │   └── function.json
-│   ├── GetProducts/              # GET /api/products
-│   │   ├── __init__.py
-│   │   └── function.json
-│   ├── GetProduct/               # GET /api/products/{id}
-│   │   ├── __init__.py
-│   │   └── function.json
-│   ├── CreateProduct/            # POST /api/products
-│   │   ├── __init__.py
-│   │   └── function.json
-│   ├── UpdateProduct/            # PUT /api/products/{id}
-│   │   ├── __init__.py
-│   │   └── function.json
+├── backend/                      # Aplicación Azure Functions
+│   ├── models/
+│   │   └── product_model.py      # Definiciones de esquema Pydantic
+│   ├── services/
+│   │   └── product_service.py    # Lógica de negocio / capa CRUD
+│   ├── utils/
+│   │   └── response_helper.py    # Constructor de respuestas JSON estandarizadas
+│   ├── HealthCheck/              # GET    /api/health
+│   ├── GetProducts/              # GET    /api/products
+│   ├── GetProduct/               # GET    /api/products/{id}
+│   ├── CreateProduct/            # POST   /api/products
+│   ├── UpdateProduct/            # PUT    /api/products/{id}
 │   ├── DeleteProduct/            # DELETE /api/products/{id}
-│   │   ├── __init__.py
-│   │   └── function.json
-│   ├── host.json                 # Azure Functions config
-│   ├── requirements.txt          # Python dependencies
-│   └── local.settings.json       # Local environment vars
+│   ├── host.json
+│   └── requirements.txt
 │
-├── frontend/                     # Static Web App Frontend
-│   ├── index.html                # Dashboard principal
-│   ├── js/
-│   │   └── app.js                # Frontend logic (AJAX, DOM)
-│   └── README.md                 # Frontend docs
+├── frontend/                     # Static Web App
+│   ├── index.html
+│   └── js/app.js                 # Vanilla JS — llamadas API, DOM, estado
 │
-├── docs/                         # Documentación adicional
-│   ├── API.md                    # API reference completa
-│   ├── DEPLOYMENT.md             # Guía de deployment
+├── docs/
+│   ├── API.md                    # Referencia completa de la API
+│   ├── DEPLOYMENT.md             # Guía de despliegue paso a paso
 │   └── ARCHITECTURE.md           # Decisiones de arquitectura
 │
-├── .github/
-│   └── workflows/                # CI/CD pipelines
-│       ├── backend-deploy.yml    # Auto-deploy backend
-│       └── frontend-deploy.yml   # Auto-deploy frontend
-│
-├── .gitignore                    # Git ignore rules
-├── LICENSE                       # MIT License
-├── README.md                     # Este archivo
-└── CONTRIBUTING.md               # Guía para contribuir
+├── .github/workflows/            # Pipelines de CI/CD
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
 ```
 
 ---
 
-## 🔧 Tecnologías Utilizadas
+## Desarrollo Local
 
-### Backend
-![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
-![Azure Functions](https://img.shields.io/badge/Azure_Functions-v4-0062AD?logo=azure-functions)
-![Pydantic](https://img.shields.io/badge/Pydantic-1.10.13-E92063?logo=pydantic)
+### Requisitos Previos
 
-- **Runtime:** Python 3.12
-- **Framework:** Azure Functions v4
-- **Validación:** Pydantic 1.10.13
-- **HTTP:** Azure Functions HTTP Trigger
-- **CORS:** azure-functions-cors (custom)
+| Herramienta | Versión | Referencia |
+|---|---|---|
+| Python | 3.12+ | [python.org](https://www.python.org/downloads/) |
+| Azure Functions Core Tools | v4 | [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local) |
+| Azure CLI | 2.50+ | [learn.microsoft.com](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) |
+| Git | cualquiera | [git-scm.com](https://git-scm.com/) |
 
-### Frontend
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwind-css)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+### Configuración
 
-- **Lenguaje:** JavaScript ES6+ (Vanilla, sin frameworks)
-- **UI:** Tailwind CSS 3.4 (CDN)
-- **Icons:** Lucide Icons
-- **Hosting:** Azure Static Web Apps
+```bash
+# Clonar el repositorio
+git clone https://github.com/AndresRJ18/AZURE-Serverless-API.git
+cd AZURE-Serverless-API
 
-### Infraestructura Azure
-- **Resource Group:** `rg-products-api`
-- **Function App:** `fnapi6794`
-- **Storage Account:** `stapi2025andres`
-- **Static Web App:** `[auto-generated]`
-- **Region:** East US
-- **Plan:** Consumption (Serverless)
+# Instalar dependencias del backend
+cd backend
+pip install -r requirements.txt
 
-### DevOps
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
+# Crear archivo de configuración local
+echo '{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python"
+  }
+}' > local.settings.json
 
-- **CI/CD:** GitHub Actions
-- **Version Control:** Git + GitHub
-- **Deployment:** Automatic on push to main
+# Iniciar el runtime de Azure Functions
+func start
+```
+
+En una terminal separada:
+
+```bash
+# Servir el frontend
+cd frontend
+python -m http.server 8000
+```
+
+| Servicio | URL local |
+|---|---|
+| Frontend | http://localhost:8000 |
+| API | http://localhost:7071/api/health |
+
+> Para desarrollo local, asegúrate de que `API_BASE_URL` en `frontend/js/app.js` apunte a `http://localhost:7071`.
 
 ---
 
-## 🚢 Deployment
+## Despliegue
 
-### Deploy a Azure (Paso a Paso)
+### 1. Aprovisionar recursos en Azure
 
-#### 1. Preparar Azure CLI
 ```bash
-# Login a Azure
 az login
-
-# Seleccionar suscripción
 az account set --subscription "Suscripción de Azure 1"
-
-# Crear resource group
 az group create --name rg-products-api --location eastus
 ```
 
-#### 2. Deploy Backend (Azure Functions)
-```bash
-cd backend
+### 2. Desplegar el backend
 
-# Crear Function App
+```bash
+# Crear la Function App
 az functionapp create \
   --resource-group rg-products-api \
   --consumption-plan-location eastus \
-  --runtime python \
-  --runtime-version 3.12 \
+  --runtime python --runtime-version 3.12 \
   --functions-version 4 \
   --name fnapi6794 \
   --storage-account stapi2025andres \
   --os-type Linux
 
-# Deploy con Azure Functions Core Tools
+# Publicar desde el código fuente
+cd backend
 func azure functionapp publish fnapi6794 --python
-
-# Verificar
-curl https://fnapi6794.azurewebsites.net/api/health
 ```
 
-#### 3. Deploy Frontend (Static Web App)
-```bash
-cd frontend
+### 3. Desplegar el frontend
 
-# Crear Static Web App (desde Azure Portal o CLI)
+```bash
 az staticwebapp create \
   --name products-dashboard \
   --resource-group rg-products-api \
   --source https://github.com/AndresRJ18/AZURE-Serverless-API \
-  --location eastus \
+  --location eastus2 \
   --branch main \
   --app-location "/frontend" \
   --login-with-github
-
-# El deployment es automático con GitHub Actions
 ```
 
-#### 4. Configurar CORS
+Una vez aprovisionado, todos los despliegues posteriores se automatizan mediante GitHub Actions en cada push a `main`.
+
+### 4. Configurar CORS
+
 ```bash
-# Permitir el origen del frontend
 az functionapp cors add \
   --name fnapi6794 \
   --resource-group rg-products-api \
-  --allowed-origins https://[static-app-name].azurewebsites.net
+  --allowed-origins https://zealous-pebble-02548630f.1.azurestaticapps.net
 ```
 
-📖 **Guía completa:** Ver [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+Guía completa con rollback y monitoreo: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
 
 ---
 
-## 🧪 Testing
+## Pruebas
 
-### Probar Localmente
+### En local
 
 ```bash
-# Terminal 1: Backend
-cd backend
-func start
-
-# Terminal 2: Frontend
-cd frontend
-python -m http.server 8000
-
-# Terminal 3: Curl tests
 curl http://localhost:7071/api/health
 curl http://localhost:7071/api/products
+
+# Crear un producto de prueba
+curl -X POST http://localhost:7071/api/products \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Producto de prueba", "price": 49.99, "stock": 5}'
 ```
 
-### Probar en Producción
+### En producción
 
 ```bash
-# Health check
 curl https://fnapi6794.azurewebsites.net/api/health
-
-# CRUD completo
 curl https://fnapi6794.azurewebsites.net/api/products
-curl -X POST https://fnapi6794.azurewebsites.net/api/products \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Test Product", "price": 99.99, "stock": 10}'
 ```
 
 ---
 
-## 🎓 Aprendizajes Clave
+## Costos
 
-Este proyecto demuestra competencias en:
+| Servicio | Plan | Costo mensual |
+|---|---|---|
+| Azure Functions | Consumption Plan — 1 millón de ejecuciones/mes gratis | $0.00 |
+| Azure Static Web Apps | Free Tier — 100 GB de ancho de banda/mes | $0.00 |
+| Azure Storage Account | General Purpose v2 — uso mínimo | ~$0.00 |
+| **Total** | | **$0.00 / mes** |
 
-### Cloud Computing
-- ☁️ Arquitectura serverless en Azure
-- ☁️ Gestión de recursos cloud (Resource Groups, Storage)
-- ☁️ Servicios PaaS (Functions, Static Web Apps)
-- ☁️ Optimización de costos (Free Tier usage)
-
-### Backend Development
-- 🐍 Python 3.12 con type hints
-- 🔒 Validación de datos con Pydantic
-- 🏗️ Arquitectura modular y escalable
-- 🌐 APIs RESTful siguiendo best practices
-- ⚡ Event-driven programming (HTTP Triggers)
-
-### Frontend Development
-- 🎨 Diseño responsive sin frameworks pesados
-- 🌙 Dark mode con persistencia
-- ⚡ Vanilla JavaScript moderno (ES6+)
-- 🎯 UX optimization (loading, errors, feedback)
-
-### DevOps
-- 🚀 CI/CD con GitHub Actions
-- 📦 Deployment automatizado
-- 🔄 Version control con Git
-- 📊 Monitoring con Azure Portal
+> Los costos pueden aumentar si se superan los límites del nivel gratuito. Consulta la [calculadora de precios de Azure](https://azure.microsoft.com/es-es/pricing/) para más detalles.
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
-### ✅ Fase 1 - MVP (Completado)
-- [x] API REST funcional
-- [x] Dashboard web responsive
-- [x] Deployment en Azure
-- [x] CI/CD automático
+**Fase 1 — MVP** ✅
+- [x] API REST completa con validación Pydantic
+- [x] Dashboard frontend responsivo con modo oscuro
+- [x] Despliegue en Azure (Functions + Static Web Apps)
+- [x] CI/CD automatizado con GitHub Actions
 
-### 🚧 Fase 2 - Mejoras (En progreso)
-- [ ] Tests unitarios (pytest)
-- [ ] Azure SQL Database para persistencia
-- [ ] Application Insights para monitoring
+**Fase 2 — Hardening para producción**
+- [ ] Suite de pruebas unitarias con `pytest`
+- [ ] Azure SQL Database para almacenamiento persistente
+- [ ] Integración con Application Insights
 - [ ] Rate limiting en la API
 - [ ] Autenticación con Azure AD B2C
 
-### 🔮 Fase 3 - Features Avanzadas
-- [ ] Búsqueda con Azure Cognitive Search
-- [ ] Image upload para productos (Blob Storage)
-- [ ] Export/Import de productos (CSV)
-- [ ] API documentation con Swagger/OpenAPI
-- [ ] Notificaciones en tiempo real (SignalR)
-- [ ] Multi-tenancy support
+**Fase 3 — Capacidades extendidas**
+- [ ] Documentación OpenAPI / Swagger autogenerada
+- [ ] Carga de imágenes de productos vía Azure Blob Storage
+- [ ] Exportación / importación en formato CSV
+- [ ] Notificaciones en tiempo real con Azure SignalR Service
+- [ ] Integración con Azure Cognitive Search
 
 ---
 
-## 🤝 Contribuciones
+## Contribuciones
 
-Las contribuciones son bienvenidas. Por favor:
+Las contribuciones son bienvenidas. Por favor, sigue el flujo estándar de fork y Pull Request:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Haz fork del repositorio
+2. Crea una rama de funcionalidad: `git checkout -b feature/tu-funcionalidad`
+3. Realiza commits usando Conventional Commits: `git commit -m 'feat: descripción'`
+4. Haz push y abre un Pull Request contra `main`
 
-Ver [CONTRIBUTING.md](CONTRIBUTING.md) para más detalles.
-
----
-
-## 📝 Licencia
-
-Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+Consulta [`CONTRIBUTING.md`](CONTRIBUTING.md) para conocer las guías de estilo de código, convenciones de commits y requisitos de pruebas.
 
 ---
 
-## 👨‍💻 Autor
+## Autor
 
 **Andrés Rodas**  
-Informatics Engineering Student – UPCH  
-☁️ Cloud Computing & AI Enthusiast
+Estudiante de Ingeniería Informática — Universidad Peruana Cayetano Heredia (UPCH)  
+Entusiasta de Cloud Computing e Inteligencia Artificial
 
-- 💼 **LinkedIn:** [www.linkedin.com/in/andres-rodas-802309272](https://www.linkedin.com/in/andres-rodas-802309272)
-- 📧 **Email:** [andrescloud18sj@gmail.com](mailto:andrescloud18sj@gmail.com)
-- 🐙 **GitHub:** [@AndresRJ18](https://github.com/AndresRJ18)
-
----
-
-## 🙏 Agradecimientos
-
-- Microsoft Azure por el free tier generoso
-- Azure Functions team por la excelente documentación
-- Tailwind CSS por facilitar el diseño responsive
-- Comunidad open source
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Andrés_Rodas-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/andres-rodas-802309272)
+[![GitHub](https://img.shields.io/badge/GitHub-@AndresRJ18-181717?style=flat&logo=github)](https://github.com/AndresRJ18)
+[![Email](https://img.shields.io/badge/Email-andrescloud18sj@gmail.com-D14836?style=flat&logo=gmail)](mailto:andrescloud18sj@gmail.com)
 
 ---
 
-## 📸 Screenshots
+## Licencia
 
-### Desktop View - Light Mode
-![Dashboard Desktop Light](docs/images/dashboard-desktop-light.png)
-
-### Desktop View - Dark Mode
-![Dashboard Desktop Dark](docs/images/dashboard-desktop-dark.png)
-
-### Mobile View
-![Dashboard Mobile](docs/images/dashboard-mobile.png)
-
-### API Response Example
-![API Response](docs/images/api-response.png)
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [`LICENSE`](LICENSE) para más detalles.
 
 ---
 
 <div align="center">
-
-**⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub ⭐**
-
-[⬆ Volver arriba](#-azure-serverless-product-api--fullstack-cloud-application)
-
+Si este proyecto te resultó útil, considera darle una ⭐ en GitHub.
+<br><br>
+<a href="#azure-serverless-product-api">Volver al inicio ↑</a>
 </div>
