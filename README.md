@@ -16,10 +16,8 @@ Aplicación fullstack serverless lista para producción, construida sobre Micros
 
 ---
 
-## Tabla de Contenidos
+## 📚 Tabla de Contenidos
 
-<<<<<<< HEAD
-- [Arquitectura](#arquitectura)
 - [Características](#características)
 - [Stack Tecnológico](#stack-tecnológico)
 - [Referencia de la API](#referencia-de-la-api)
@@ -32,40 +30,14 @@ Aplicación fullstack serverless lista para producción, construida sobre Micros
 - [Contribuciones](#contribuciones)
 - [Autor](#autor)
 - [Licencia](#licencia)
-=======
-🚀 **Frontend:** [https://zealous-pebble-02548630f.1.azurestaticapps.net/](https://zealous-pebble-02548630f.1.azurestaticapps.net/)  
-⚡ **API Backend:** [https://fnapi6794.azurewebsites.net](https://fnapi6794.azurewebsites.net)  
-📦 **GitHub:** [https://github.com/AndresRJ18/AZURE-Serverless-API](https://github.com/AndresRJ18/AZURE-Serverless-API)
+
+
 
 ### Health Check
 ```bash
 curl https://fnapi6794.azurewebsites.net/api/health
 ```
 >>>>>>> 4c7b0e5930075431c182d9696a8b26d5bf29ffeb
-
----
-
-## Arquitectura
-
-```mermaid
-graph TD
-    User[🧑‍💻 Usuario Web] -->|HTTPS| SWA[🌐 Azure Static Web Apps\nHTML · JS · Tailwind CSS]
-    SWA -->|REST API / CORS| AFN[⚙️ Azure Functions v4\nPython 3.12 · HTTP Triggers]
-    AFN -->|Validación de esquema| PYD[(Modelos Pydantic\nv1.10.13)]
-    AFN -->|Operaciones CRUD| MEM[💾 Almacenamiento en memoria\nExtensible a CosmosDB / SQL]
-    MEM -->|Datos de respuesta| AFN
-    AFN -->|Respuesta JSON| SWA
-    SWA -->|Actualización de UI| User
-
-    subgraph Nube de Azure
-        SWA
-        AFN
-        PYD
-        MEM
-    end
-```
-
-**Ciclo de vida de una solicitud:** El frontend emite llamadas AJAX desde el Static Web App hacia el backend en Azure Functions. Cada función valida el payload de forma independiente con Pydantic, ejecuta la operación correspondiente en la capa de servicios y devuelve una respuesta JSON estandarizada. El frontend actualiza la interfaz de forma reactiva mediante notificaciones toast y estados de carga.
 
 ---
 
