@@ -18,6 +18,7 @@ Aplicación fullstack serverless lista para producción, construida sobre Micros
 
 ## Tabla de Contenidos
 
+<<<<<<< HEAD
 - [Arquitectura](#arquitectura)
 - [Características](#características)
 - [Stack Tecnológico](#stack-tecnológico)
@@ -31,6 +32,16 @@ Aplicación fullstack serverless lista para producción, construida sobre Micros
 - [Contribuciones](#contribuciones)
 - [Autor](#autor)
 - [Licencia](#licencia)
+=======
+🚀 **Frontend:** [https://zealous-pebble-02548630f.1.azurestaticapps.net/](https://zealous-pebble-02548630f.1.azurestaticapps.net/)  
+⚡ **API Backend:** [https://fnapi6794.azurewebsites.net](https://fnapi6794.azurewebsites.net)  
+📦 **GitHub:** [https://github.com/AndresRJ18/AZURE-Serverless-API](https://github.com/AndresRJ18/AZURE-Serverless-API)
+
+### Health Check
+```bash
+curl https://fnapi6794.azurewebsites.net/api/health
+```
+>>>>>>> 4c7b0e5930075431c182d9696a8b26d5bf29ffeb
 
 ---
 
